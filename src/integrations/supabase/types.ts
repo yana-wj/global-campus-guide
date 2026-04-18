@@ -46,6 +46,7 @@ export type Database = {
           created_at: string
           description_en: string | null
           description_ru: string | null
+          dorm_cost_usd: number | null
           famous_alumni: string | null
           gpa_min: number | null
           has_full_grant: boolean
@@ -58,6 +59,7 @@ export type Database = {
           name_ru: string
           ranking: number | null
           region: string
+          rent_cost_usd: number | null
           requirements_en: string | null
           requirements_ru: string | null
           sat_min: number | null
@@ -76,6 +78,7 @@ export type Database = {
           created_at?: string
           description_en?: string | null
           description_ru?: string | null
+          dorm_cost_usd?: number | null
           famous_alumni?: string | null
           gpa_min?: number | null
           has_full_grant?: boolean
@@ -88,6 +91,7 @@ export type Database = {
           name_ru: string
           ranking?: number | null
           region: string
+          rent_cost_usd?: number | null
           requirements_en?: string | null
           requirements_ru?: string | null
           sat_min?: number | null
@@ -106,6 +110,7 @@ export type Database = {
           created_at?: string
           description_en?: string | null
           description_ru?: string | null
+          dorm_cost_usd?: number | null
           famous_alumni?: string | null
           gpa_min?: number | null
           has_full_grant?: boolean
@@ -118,6 +123,7 @@ export type Database = {
           name_ru?: string
           ranking?: number | null
           region?: string
+          rent_cost_usd?: number | null
           requirements_en?: string | null
           requirements_ru?: string | null
           sat_min?: number | null

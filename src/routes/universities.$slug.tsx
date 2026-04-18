@@ -199,9 +199,29 @@ function DetailPage() {
               </span>
             </p>
           </Section>
-          {housing && (
+          {(housing || uni.dorm_cost_usd || uni.rent_cost_usd) && (
             <Section icon={HomeIcon} title={t("s_housing")} accent="sky">
-              <p>{housing}</p>
+              {(uni.dorm_cost_usd || uni.rent_cost_usd) && (
+                <div className="mb-3 grid grid-cols-2 gap-3">
+                  <div className="rounded-xl bg-muted/40 p-3">
+                    <div className="text-xs uppercase tracking-wider text-muted-foreground">
+                      {t("dorm_cost")}
+                    </div>
+                    <div className="mt-1 font-display text-lg font-bold text-primary">
+                      {uni.dorm_cost_usd ? `$${uni.dorm_cost_usd.toLocaleString()} ${t("per_month")}` : "—"}
+                    </div>
+                  </div>
+                  <div className="rounded-xl bg-muted/40 p-3">
+                    <div className="text-xs uppercase tracking-wider text-muted-foreground">
+                      {t("rent_cost")}
+                    </div>
+                    <div className="mt-1 font-display text-lg font-bold text-sky">
+                      {uni.rent_cost_usd ? `$${uni.rent_cost_usd.toLocaleString()} ${t("per_month")}` : "—"}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {housing && <p>{housing}</p>}
             </Section>
           )}
           {uni.famous_alumni && (

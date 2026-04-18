@@ -38,6 +38,9 @@ export const dict: Dict = {
   s_chance: { ru: "Шанс поступления", en: "Admission chance" },
   s_cost: { ru: "Стоимость и гранты", en: "Cost & grants" },
   s_housing: { ru: "Жильё", en: "Housing" },
+  dorm_cost: { ru: "Общежитие", en: "Dorm" },
+  rent_cost: { ru: "Аренда жилья", en: "Off-campus rent" },
+  per_month: { ru: "$/мес", en: "$/mo" },
   s_alumni: { ru: "Известные выпускники", en: "Famous alumni" },
   s_ranking: { ru: "Рейтинг", en: "Ranking" },
 
