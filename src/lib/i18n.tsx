@@ -16,7 +16,7 @@ export const dict: Dict = {
 
   hero_title: { ru: "Твой компас в мир университетов", en: "Your compass to the world of universities" },
   hero_sub: {
-    ru: "Гайд для студентов из СНГ: США, Европа, Азия. Требования, баллы, стоимость, гранты, жильё и шансы поступления — в одном месте.",
+    ru: "Гид для студентов из СНГ: США, Европа и Азия. Требования, баллы, стоимость, гранты, жильё и шансы поступления — всё в одном месте.",
     en: "A guide for CIS students: USA, Europe, Asia. Requirements, scores, cost, grants, housing and admission chances — all in one place.",
   },
   hero_cta: { ru: "Смотреть университеты", en: "Browse universities" },
