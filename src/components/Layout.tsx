@@ -97,6 +97,8 @@ export function Layout() {
         <Outlet />
       </main>
 
+      <CompareFAB />
+
       <footer className="border-t border-border/60 bg-muted/30">
         <div className="mx-auto max-w-7xl px-4 py-8 text-center text-sm text-muted-foreground sm:px-6 lg:px-8">
           {t("footer")}
