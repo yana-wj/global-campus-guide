@@ -35,9 +35,15 @@ export const Route = createRootRoute({
         content:
           "Wayzen — гид по университетам США, Европы и Азии для иностранных студентов. Требования, баллы, стоимость, гранты и жильё.",
       },
-      { property: "og:title", content: "Wayzen — Future Compass" },
-      { property: "og:description", content: "Гид по университетам мира для студентов из СНГ." },
+      { property: "og:title", content: "Wayzen — Future Compass | Университеты для студентов СНГ" },
+      { property: "og:description", content: "universities around the world/ easy guide" },
       { property: "og:type", content: "website" },
+      { name: "twitter:title", content: "Wayzen — Future Compass | Университеты для студентов СНГ" },
+      { name: "description", content: "universities around the world/ easy guide" },
+      { name: "twitter:description", content: "universities around the world/ easy guide" },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e548237b-9afd-4ca5-a2db-2beb745d5220/id-preview-1120a53e--38c7c1eb-0f75-4e7c-afe0-afb7031e131e.lovable.app-1776497783795.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e548237b-9afd-4ca5-a2db-2beb745d5220/id-preview-1120a53e--38c7c1eb-0f75-4e7c-afe0-afb7031e131e.lovable.app-1776497783795.png" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       {
