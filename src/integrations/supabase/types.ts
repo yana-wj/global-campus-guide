@@ -14,16 +14,159 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      universities: {
+        Row: {
+          admission_rate: number | null
+          city: string | null
+          country: string
+          created_at: string
+          description_en: string | null
+          description_ru: string | null
+          famous_alumni: string | null
+          gpa_min: number | null
+          has_full_grant: boolean
+          housing_info_en: string | null
+          housing_info_ru: string | null
+          id: string
+          ielts_min: number | null
+          image_url: string | null
+          name_en: string
+          name_ru: string
+          ranking: number | null
+          region: string
+          requirements_en: string | null
+          requirements_ru: string | null
+          sat_min: number | null
+          slug: string
+          toefl_min: number | null
+          tuition_usd: number | null
+          updated_at: string
+          values_en: string | null
+          values_ru: string | null
+          website_url: string | null
+        }
+        Insert: {
+          admission_rate?: number | null
+          city?: string | null
+          country: string
+          created_at?: string
+          description_en?: string | null
+          description_ru?: string | null
+          famous_alumni?: string | null
+          gpa_min?: number | null
+          has_full_grant?: boolean
+          housing_info_en?: string | null
+          housing_info_ru?: string | null
+          id?: string
+          ielts_min?: number | null
+          image_url?: string | null
+          name_en: string
+          name_ru: string
+          ranking?: number | null
+          region: string
+          requirements_en?: string | null
+          requirements_ru?: string | null
+          sat_min?: number | null
+          slug: string
+          toefl_min?: number | null
+          tuition_usd?: number | null
+          updated_at?: string
+          values_en?: string | null
+          values_ru?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          admission_rate?: number | null
+          city?: string | null
+          country?: string
+          created_at?: string
+          description_en?: string | null
+          description_ru?: string | null
+          famous_alumni?: string | null
+          gpa_min?: number | null
+          has_full_grant?: boolean
+          housing_info_en?: string | null
+          housing_info_ru?: string | null
+          id?: string
+          ielts_min?: number | null
+          image_url?: string | null
+          name_en?: string
+          name_ru?: string
+          ranking?: number | null
+          region?: string
+          requirements_en?: string | null
+          requirements_ru?: string | null
+          sat_min?: number | null
+          slug?: string
+          toefl_min?: number | null
+          tuition_usd?: number | null
+          updated_at?: string
+          values_en?: string | null
+          values_ru?: string | null
+          website_url?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +293,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
