@@ -4,6 +4,7 @@ import { useAuth } from "@/lib/auth";
 import { useCompare } from "@/lib/compare-store";
 import { Button } from "@/components/ui/button";
 import { Compass, GitCompare, LogOut, ShieldCheck, LogIn } from "lucide-react";
+import { CompareFAB } from "@/components/CompareFAB";
 
 export function Layout() {
   const { lang, setLang, t } = useLang();
@@ -95,6 +96,8 @@ export function Layout() {
       <main className="flex-1">
         <Outlet />
       </main>
+
+      <CompareFAB />
 
       <footer className="border-t border-border/60 bg-muted/30">
         <div className="mx-auto max-w-7xl px-4 py-8 text-center text-sm text-muted-foreground sm:px-6 lg:px-8">
