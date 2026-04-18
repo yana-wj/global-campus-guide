@@ -255,7 +255,14 @@ function AdminPage() {
               <TArea label="Values (EN)" value={form.values_en ?? ""} onChange={(v) => update("values_en", v)} />
               <TArea label="Housing (RU)" value={form.housing_info_ru ?? ""} onChange={(v) => update("housing_info_ru", v)} />
               <TArea label="Housing (EN)" value={form.housing_info_en ?? ""} onChange={(v) => update("housing_info_en", v)} />
-              <TArea label="Famous alumni" value={form.famous_alumni ?? ""} onChange={(v) => update("famous_alumni", v)} />
+              <TArea label="Famous alumni (legacy text)" value={form.famous_alumni ?? ""} onChange={(v) => update("famous_alumni", v)} />
+              <TArea
+                label='Alumni JSON: [{"name_ru":"...","name_en":"...","bio_ru":"...","bio_en":"...","year":"...","photo":"https://..."}]'
+                value={form.alumni ? JSON.stringify(form.alumni, null, 2) : "[]"}
+                onChange={(v) => {
+                  try { update("alumni", JSON.parse(v)); } catch { /* ignore until valid */ }
+                }}
+              />
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setOpen(false)}>

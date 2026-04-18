@@ -41,6 +41,7 @@ export type Database = {
       universities: {
         Row: {
           admission_rate: number | null
+          alumni: Json
           city: string | null
           country: string
           created_at: string
@@ -73,6 +74,7 @@ export type Database = {
         }
         Insert: {
           admission_rate?: number | null
+          alumni?: Json
           city?: string | null
           country: string
           created_at?: string
@@ -105,6 +107,7 @@ export type Database = {
         }
         Update: {
           admission_rate?: number | null
+          alumni?: Json
           city?: string | null
           country?: string
           created_at?: string
