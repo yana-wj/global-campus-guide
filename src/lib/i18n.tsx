@@ -42,6 +42,7 @@ export const dict: Dict = {
   rent_cost: { ru: "Аренда жилья", en: "Off-campus rent" },
   per_month: { ru: "$/мес", en: "$/mo" },
   s_alumni: { ru: "Известные выпускники", en: "Famous alumni" },
+  alumni_year: { ru: "Год выпуска", en: "Class of" },
   s_ranking: { ru: "Рейтинг", en: "Ranking" },
 
   full_grant_yes: { ru: "Доступен полный грант", en: "Full grant available" },

@@ -224,11 +224,45 @@ function DetailPage() {
               {housing && <p>{housing}</p>}
             </Section>
           )}
-          {uni.famous_alumni && (
-            <Section icon={Users} title={t("s_alumni")} accent="sun">
-              <p>{uni.famous_alumni}</p>
-            </Section>
-          )}
+          {(() => {
+            const alumni = (uni.alumni as Array<{
+              name_ru: string; name_en: string; bio_ru?: string; bio_en?: string; year?: string; photo?: string;
+            }> | null) ?? [];
+            if (alumni.length === 0 && !uni.famous_alumni) return null;
+            return (
+              <Section icon={Users} title={t("s_alumni")} accent="sun">
+                {alumni.length > 0 ? (
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {alumni.map((a, i) => {
+                      const aname = lang === "ru" ? a.name_ru : a.name_en;
+                      const abio = lang === "ru" ? a.bio_ru : a.bio_en;
+                      return (
+                        <div key={i} className="flex gap-3 rounded-xl border border-border/60 bg-muted/20 p-3">
+                          {a.photo && (
+                            <img
+                              src={a.photo}
+                              alt={aname}
+                              loading="lazy"
+                              className="h-16 w-16 flex-shrink-0 rounded-full object-cover ring-2 ring-sun/40"
+                            />
+                          )}
+                          <div className="min-w-0">
+                            <div className="font-display font-bold leading-tight">{aname}</div>
+                            {a.year && a.year !== "—" && (
+                              <div className="text-xs text-muted-foreground">{t("alumni_year")} {a.year}</div>
+                            )}
+                            {abio && <p className="mt-1 text-xs text-foreground/75">{abio}</p>}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p>{uni.famous_alumni}</p>
+                )}
+              </Section>
+            );
+          })()}
         </div>
       </div>
     </article>
