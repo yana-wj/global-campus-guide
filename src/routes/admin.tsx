@@ -91,7 +91,7 @@ function AdminPage() {
         )}
         {user && (
           <p className="mt-4 text-sm text-muted-foreground">
-            {lang === "ru" ? "Твой user ID:" : "Your user ID:"}{" "}
+            {lang === "ru" ? "Ваш user ID:" : "Your user ID:"}{" "}
             <code className="rounded bg-muted px-2 py-0.5 text-xs">{user.id}</code>
           </p>
         )}

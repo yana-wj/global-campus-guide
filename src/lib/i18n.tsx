@@ -14,9 +14,9 @@ export const dict: Dict = {
   nav_signin: { ru: "Войти", en: "Sign in" },
   nav_signout: { ru: "Выйти", en: "Sign out" },
 
-  hero_title: { ru: "Твой компас в мир университетов", en: "Your compass to the world of universities" },
+  hero_title: { ru: "Ваш компас в мир университетов", en: "Your compass to the world of universities" },
   hero_sub: {
-    ru: "Гайд для студентов из СНГ: США, Европа, Азия. Требования, баллы, стоимость, гранты, жильё и шансы поступления — в одном месте.",
+    ru: "Гид для студентов из СНГ: США, Европа и Азия. Требования, баллы, стоимость, гранты, жильё и шансы поступления — всё в одном месте.",
     en: "A guide for CIS students: USA, Europe, Asia. Requirements, scores, cost, grants, housing and admission chances — all in one place.",
   },
   hero_cta: { ru: "Смотреть университеты", en: "Browse universities" },
@@ -53,7 +53,7 @@ export const dict: Dict = {
   empty: { ru: "Ничего не найдено", en: "Nothing found" },
 
   compare_title: { ru: "Сравнение университетов", en: "Compare universities" },
-  compare_sub: { ru: "Выбери до 3 вузов", en: "Pick up to 3 universities" },
+  compare_sub: { ru: "Выберите до 3 вузов", en: "Pick up to 3 universities" },
   compare_pick: { ru: "Добавить к сравнению", en: "Add to compare" },
   compare_remove: { ru: "Убрать", en: "Remove" },
   compare_clear: { ru: "Очистить", en: "Clear all" },

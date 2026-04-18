@@ -66,7 +66,7 @@ function ComparePage() {
         <div className="rounded-2xl border border-dashed border-border bg-muted/30 py-20 text-center">
           <p className="text-muted-foreground">
             {lang === "ru"
-              ? "Добавь до 3 университетов из каталога"
+              ? "Добавьте до 3 университетов из каталога"
               : "Add up to 3 universities from the catalog"}
           </p>
           <Button asChild className="mt-4">
