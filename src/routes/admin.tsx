@@ -48,6 +48,8 @@ const empty: FormState = {
   ranking: null,
   housing_info_ru: "",
   housing_info_en: "",
+  dorm_cost_usd: null,
+  rent_cost_usd: null,
   famous_alumni: "",
   image_url: "",
   website_url: "",
@@ -217,6 +219,18 @@ function AdminPage() {
                 type="number"
                 value={form.tuition_usd?.toString() ?? ""}
                 onChange={(v) => update("tuition_usd", numOrNull(v))}
+              />
+              <Field
+                label="Dorm USD/month"
+                type="number"
+                value={form.dorm_cost_usd?.toString() ?? ""}
+                onChange={(v) => update("dorm_cost_usd", numOrNull(v))}
+              />
+              <Field
+                label="Rent USD/month"
+                type="number"
+                value={form.rent_cost_usd?.toString() ?? ""}
+                onChange={(v) => update("rent_cost_usd", numOrNull(v))}
               />
               <Field
                 label="World ranking"

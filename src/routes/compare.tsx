@@ -33,6 +33,8 @@ function ComparePage() {
     { label: t("s_ranking"), render: (u) => (u.ranking ? `#${u.ranking}` : "—") },
     { label: t("s_chance"), render: (u) => (u.admission_rate ? `${u.admission_rate}%` : "—") },
     { label: t("tuition_year"), render: (u) => (u.tuition_usd ? `$${u.tuition_usd.toLocaleString()}` : "—") },
+    { label: `${t("dorm_cost")} (${t("per_month")})`, render: (u) => (u.dorm_cost_usd ? `$${u.dorm_cost_usd.toLocaleString()}` : "—") },
+    { label: `${t("rent_cost")} (${t("per_month")})`, render: (u) => (u.rent_cost_usd ? `$${u.rent_cost_usd.toLocaleString()}` : "—") },
     {
       label: t("full_grant_yes"),
       render: (u) =>
