@@ -159,6 +159,10 @@ function DetailPage() {
                   </a>
                 </Button>
               )}
+              <Button variant={fav ? "default" : "outline"} onClick={onFav}>
+                <Heart className={`h-4 w-4 ${fav ? "fill-current" : ""}`} />
+                {fav ? t("fav_remove") : t("fav_add")}
+              </Button>
               <Button
                 variant={inCompare ? "default" : "secondary"}
                 onClick={() => toggle(uni.id)}
