@@ -11,8 +11,32 @@ export const dict: Dict = {
   nav_catalog: { ru: "Университеты", en: "Universities" },
   nav_compare: { ru: "Сравнение", en: "Compare" },
   nav_admin: { ru: "Админ", en: "Admin" },
+  nav_submit: { ru: "Предложить вуз", en: "Submit university" },
   nav_signin: { ru: "Войти", en: "Sign in" },
   nav_signout: { ru: "Выйти", en: "Sign out" },
+
+  submit_title: { ru: "Предложить новый университет", en: "Submit a new university" },
+  submit_sub: {
+    ru: "Заполните шаблон. После одобрения владельцем университет появится на сайте.",
+    en: "Fill out the template. The university will appear on the site after the owner approves.",
+  },
+  submit_send: { ru: "Отправить на модерацию", en: "Submit for review" },
+  submit_my: { ru: "Мои заявки", en: "My submissions" },
+  submit_no_access: {
+    ru: "Чтобы предлагать университеты, попросите владельца выдать вам роль редактора.",
+    en: "To submit universities, ask the owner to grant you the editor role.",
+  },
+  submit_success: { ru: "Заявка отправлена!", en: "Submission sent!" },
+  submit_status_pending: { ru: "На рассмотрении", en: "Pending" },
+  submit_status_approved: { ru: "Одобрено", en: "Approved" },
+  submit_status_rejected: { ru: "Отклонено", en: "Rejected" },
+
+  admin_submissions: { ru: "Заявки на университеты", en: "University submissions" },
+  admin_review: { ru: "Рассмотреть", en: "Review" },
+  admin_approve: { ru: "Одобрить и опубликовать", en: "Approve & publish" },
+  admin_reject: { ru: "Отклонить", en: "Reject" },
+  admin_notes: { ru: "Комментарий (опционально)", en: "Notes (optional)" },
+  admin_no_pending: { ru: "Нет заявок на рассмотрении", en: "No pending submissions" },
 
   hero_title: { ru: "Ваш компас в мир университетов", en: "Your compass to the world of universities" },
   hero_sub: {
