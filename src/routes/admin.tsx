@@ -257,6 +257,8 @@ function AdminPage() {
         </Dialog>
       </div>
 
+      {isOwner && <StaffManagement />}
+
       {/* Submissions inbox */}
       <div className="mb-10 rounded-2xl border border-border bg-card">
         <div className="flex items-center gap-2 border-b border-border p-4">
