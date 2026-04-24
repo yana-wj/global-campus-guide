@@ -140,6 +140,123 @@ export type Database = {
         }
         Relationships: []
       }
+      university_submissions: {
+        Row: {
+          admin_notes: string | null
+          admission_rate: number | null
+          alumni: Json
+          city: string | null
+          country: string
+          created_at: string
+          description_en: string | null
+          description_ru: string | null
+          dorm_cost_usd: number | null
+          famous_alumni: string | null
+          gpa_min: number | null
+          has_full_grant: boolean
+          housing_info_en: string | null
+          housing_info_ru: string | null
+          id: string
+          ielts_min: number | null
+          image_url: string | null
+          name_en: string
+          name_ru: string
+          ranking: number | null
+          region: string
+          rent_cost_usd: number | null
+          requirements_en: string | null
+          requirements_ru: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          sat_min: number | null
+          slug: string
+          status: string
+          submitted_by: string
+          toefl_min: number | null
+          tuition_usd: number | null
+          updated_at: string
+          values_en: string | null
+          values_ru: string | null
+          website_url: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          admission_rate?: number | null
+          alumni?: Json
+          city?: string | null
+          country: string
+          created_at?: string
+          description_en?: string | null
+          description_ru?: string | null
+          dorm_cost_usd?: number | null
+          famous_alumni?: string | null
+          gpa_min?: number | null
+          has_full_grant?: boolean
+          housing_info_en?: string | null
+          housing_info_ru?: string | null
+          id?: string
+          ielts_min?: number | null
+          image_url?: string | null
+          name_en: string
+          name_ru: string
+          ranking?: number | null
+          region: string
+          rent_cost_usd?: number | null
+          requirements_en?: string | null
+          requirements_ru?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          sat_min?: number | null
+          slug: string
+          status?: string
+          submitted_by: string
+          toefl_min?: number | null
+          tuition_usd?: number | null
+          updated_at?: string
+          values_en?: string | null
+          values_ru?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          admission_rate?: number | null
+          alumni?: Json
+          city?: string | null
+          country?: string
+          created_at?: string
+          description_en?: string | null
+          description_ru?: string | null
+          dorm_cost_usd?: number | null
+          famous_alumni?: string | null
+          gpa_min?: number | null
+          has_full_grant?: boolean
+          housing_info_en?: string | null
+          housing_info_ru?: string | null
+          id?: string
+          ielts_min?: number | null
+          image_url?: string | null
+          name_en?: string
+          name_ru?: string
+          ranking?: number | null
+          region?: string
+          rent_cost_usd?: number | null
+          requirements_en?: string | null
+          requirements_ru?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          sat_min?: number | null
+          slug?: string
+          status?: string
+          submitted_by?: string
+          toefl_min?: number | null
+          tuition_usd?: number | null
+          updated_at?: string
+          values_en?: string | null
+          values_ru?: string | null
+          website_url?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
