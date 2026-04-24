@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SubmitRouteImport } from './routes/submit'
 import { Route as CompareRouteImport } from './routes/compare'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -16,6 +17,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as UniversitiesIndexRouteImport } from './routes/universities.index'
 import { Route as UniversitiesSlugRouteImport } from './routes/universities.$slug'
 
+const SubmitRoute = SubmitRouteImport.update({
+  id: '/submit',
+  path: '/submit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CompareRoute = CompareRouteImport.update({
   id: '/compare',
   path: '/compare',
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/compare': typeof CompareRoute
+  '/submit': typeof SubmitRoute
   '/universities/$slug': typeof UniversitiesSlugRoute
   '/universities/': typeof UniversitiesIndexRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/compare': typeof CompareRoute
+  '/submit': typeof SubmitRoute
   '/universities/$slug': typeof UniversitiesSlugRoute
   '/universities': typeof UniversitiesIndexRoute
 }
@@ -69,6 +77,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/compare': typeof CompareRoute
+  '/submit': typeof SubmitRoute
   '/universities/$slug': typeof UniversitiesSlugRoute
   '/universities/': typeof UniversitiesIndexRoute
 }
@@ -79,6 +88,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/compare'
+    | '/submit'
     | '/universities/$slug'
     | '/universities/'
   fileRoutesByTo: FileRoutesByTo
@@ -87,6 +97,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/compare'
+    | '/submit'
     | '/universities/$slug'
     | '/universities'
   id:
@@ -95,6 +106,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/compare'
+    | '/submit'
     | '/universities/$slug'
     | '/universities/'
   fileRoutesById: FileRoutesById
@@ -104,12 +116,20 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
   CompareRoute: typeof CompareRoute
+  SubmitRoute: typeof SubmitRoute
   UniversitiesSlugRoute: typeof UniversitiesSlugRoute
   UniversitiesIndexRoute: typeof UniversitiesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/submit': {
+      id: '/submit'
+      path: '/submit'
+      fullPath: '/submit'
+      preLoaderRoute: typeof SubmitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/compare': {
       id: '/compare'
       path: '/compare'
@@ -160,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
   CompareRoute: CompareRoute,
+  SubmitRoute: SubmitRoute,
   UniversitiesSlugRoute: UniversitiesSlugRoute,
   UniversitiesIndexRoute: UniversitiesIndexRoute,
 }
