@@ -5,9 +5,8 @@ import { useLang } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import type { University } from "@/components/UniversityCard";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -16,43 +15,24 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Plus, Pencil, Trash2, ShieldAlert } from "lucide-react";
+import { Plus, Pencil, Trash2, ShieldAlert, Check, X, Inbox } from "lucide-react";
 import { toast } from "sonner";
+import {
+  UniversityFormFields,
+  emptyUniForm,
+  type UniFormState,
+} from "@/components/UniversityFormFields";
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-type FormState = Partial<University> & { region: "usa" | "europe" | "asia" };
-
-const empty: FormState = {
-  slug: "",
-  name_ru: "",
-  name_en: "",
-  country: "",
-  region: "usa",
-  city: "",
-  description_ru: "",
-  description_en: "",
-  requirements_ru: "",
-  requirements_en: "",
-  toefl_min: null,
-  ielts_min: null,
-  sat_min: null,
-  gpa_min: null,
-  values_ru: "",
-  values_en: "",
-  admission_rate: null,
-  tuition_usd: null,
-  has_full_grant: false,
-  ranking: null,
-  housing_info_ru: "",
-  housing_info_en: "",
-  dorm_cost_usd: null,
-  rent_cost_usd: null,
-  famous_alumni: "",
-  image_url: "",
-  website_url: "",
+type Submission = UniFormState & {
+  id: string;
+  submitted_by: string;
+  status: string;
+  admin_notes: string | null;
+  created_at: string;
 };
 
 function AdminPage() {
@@ -61,7 +41,13 @@ function AdminPage() {
   const [items, setItems] = useState<University[]>([]);
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<University | null>(null);
-  const [form, setForm] = useState<FormState>(empty);
+  const [form, setForm] = useState<UniFormState>(emptyUniForm);
+
+  const [pending, setPending] = useState<Submission[]>([]);
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const [reviewing, setReviewing] = useState<Submission | null>(null);
+  const [reviewForm, setReviewForm] = useState<UniFormState>(emptyUniForm);
+  const [adminNotes, setAdminNotes] = useState("");
 
   const reload = () => {
     supabase
@@ -69,6 +55,12 @@ function AdminPage() {
       .select("*")
       .order("created_at", { ascending: false })
       .then(({ data }) => setItems(data ?? []));
+    supabase
+      .from("university_submissions")
+      .select("*")
+      .eq("status", "pending")
+      .order("created_at", { ascending: false })
+      .then(({ data }) => setPending((data ?? []) as Submission[]));
   };
 
   useEffect(() => {
@@ -103,12 +95,12 @@ function AdminPage() {
 
   const openNew = () => {
     setEditing(null);
-    setForm(empty);
+    setForm(emptyUniForm);
     setOpen(true);
   };
   const openEdit = (u: University) => {
     setEditing(u);
-    setForm({ ...u, region: u.region as "usa" | "europe" | "asia" });
+    setForm({ ...emptyUniForm, ...u, region: u.region as "usa" | "europe" | "asia" });
     setOpen(true);
   };
 
@@ -141,10 +133,95 @@ function AdminPage() {
     reload();
   };
 
-  const update = <K extends keyof FormState>(k: K, v: FormState[K]) =>
-    setForm((f) => ({ ...f, [k]: v }));
+  const openReview = (s: Submission) => {
+    setReviewing(s);
+    setReviewForm({
+      ...emptyUniForm,
+      slug: s.slug,
+      region: (s.region as "usa" | "europe" | "asia") ?? "usa",
+      name_ru: s.name_ru,
+      name_en: s.name_en,
+      country: s.country,
+      city: s.city,
+      image_url: s.image_url,
+      website_url: s.website_url,
+      description_ru: s.description_ru,
+      description_en: s.description_en,
+      requirements_ru: s.requirements_ru,
+      requirements_en: s.requirements_en,
+      values_ru: s.values_ru,
+      values_en: s.values_en,
+      housing_info_ru: s.housing_info_ru,
+      housing_info_en: s.housing_info_en,
+      toefl_min: s.toefl_min,
+      ielts_min: s.ielts_min,
+      sat_min: s.sat_min,
+      gpa_min: s.gpa_min,
+      admission_rate: s.admission_rate,
+      tuition_usd: s.tuition_usd,
+      dorm_cost_usd: s.dorm_cost_usd,
+      rent_cost_usd: s.rent_cost_usd,
+      ranking: s.ranking,
+      has_full_grant: !!s.has_full_grant,
+      famous_alumni: s.famous_alumni,
+      alumni: Array.isArray(s.alumni) ? s.alumni : [],
+    });
+    setAdminNotes(s.admin_notes ?? "");
+    setReviewOpen(true);
+  };
 
-  const numOrNull = (v: string) => (v === "" ? null : Number(v));
+  const approve = async () => {
+    if (!reviewing) return;
+    if (!reviewForm.slug || !reviewForm.name_ru || !reviewForm.name_en || !reviewForm.country) {
+      toast.error("slug, name, country required");
+      return;
+    }
+    const { error: insErr } = await supabase
+      .from("universities")
+      .insert({ ...reviewForm } as never);
+    if (insErr) {
+      toast.error(insErr.message);
+      return;
+    }
+    const { error: updErr } = await supabase
+      .from("university_submissions")
+      .update({
+        status: "approved",
+        admin_notes: adminNotes || null,
+        reviewed_by: user.id,
+        reviewed_at: new Date().toISOString(),
+      })
+      .eq("id", reviewing.id);
+    if (updErr) {
+      toast.error(updErr.message);
+      return;
+    }
+    toast.success(lang === "ru" ? "Опубликовано" : "Published");
+    setReviewOpen(false);
+    setReviewing(null);
+    reload();
+  };
+
+  const reject = async () => {
+    if (!reviewing) return;
+    const { error } = await supabase
+      .from("university_submissions")
+      .update({
+        status: "rejected",
+        admin_notes: adminNotes || null,
+        reviewed_by: user.id,
+        reviewed_at: new Date().toISOString(),
+      })
+      .eq("id", reviewing.id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success(lang === "ru" ? "Отклонено" : "Rejected");
+    setReviewOpen(false);
+    setReviewing(null);
+    reload();
+  };
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -163,107 +240,7 @@ function AdminPage() {
             <DialogHeader>
               <DialogTitle>{editing ? t("admin_edit") : t("admin_add")}</DialogTitle>
             </DialogHeader>
-            <div className="grid gap-4 py-2 sm:grid-cols-2">
-              <Field label="Slug *" value={form.slug ?? ""} onChange={(v) => update("slug", v)} />
-              <SelectField
-                label="Region *"
-                value={form.region}
-                onChange={(v) => update("region", v as "usa" | "europe" | "asia")}
-                options={[
-                  { v: "usa", l: "USA" },
-                  { v: "europe", l: "Europe" },
-                  { v: "asia", l: "Asia" },
-                ]}
-              />
-              <Field label="Name (RU) *" value={form.name_ru ?? ""} onChange={(v) => update("name_ru", v)} />
-              <Field label="Name (EN) *" value={form.name_en ?? ""} onChange={(v) => update("name_en", v)} />
-              <Field label="Country *" value={form.country ?? ""} onChange={(v) => update("country", v)} />
-              <Field label="City" value={form.city ?? ""} onChange={(v) => update("city", v)} />
-              <Field label="Image URL" value={form.image_url ?? ""} onChange={(v) => update("image_url", v)} />
-              <Field label="Website URL" value={form.website_url ?? ""} onChange={(v) => update("website_url", v)} />
-              <Field
-                label="TOEFL min"
-                type="number"
-                value={form.toefl_min?.toString() ?? ""}
-                onChange={(v) => update("toefl_min", numOrNull(v))}
-              />
-              <Field
-                label="IELTS min"
-                type="number"
-                step="0.5"
-                value={form.ielts_min?.toString() ?? ""}
-                onChange={(v) => update("ielts_min", numOrNull(v))}
-              />
-              <Field
-                label="SAT min"
-                type="number"
-                value={form.sat_min?.toString() ?? ""}
-                onChange={(v) => update("sat_min", numOrNull(v))}
-              />
-              <Field
-                label="GPA min"
-                type="number"
-                step="0.01"
-                value={form.gpa_min?.toString() ?? ""}
-                onChange={(v) => update("gpa_min", numOrNull(v))}
-              />
-              <Field
-                label="Admission rate %"
-                type="number"
-                step="0.1"
-                value={form.admission_rate?.toString() ?? ""}
-                onChange={(v) => update("admission_rate", numOrNull(v))}
-              />
-              <Field
-                label="Tuition USD/year"
-                type="number"
-                value={form.tuition_usd?.toString() ?? ""}
-                onChange={(v) => update("tuition_usd", numOrNull(v))}
-              />
-              <Field
-                label="Dorm USD/month"
-                type="number"
-                value={form.dorm_cost_usd?.toString() ?? ""}
-                onChange={(v) => update("dorm_cost_usd", numOrNull(v))}
-              />
-              <Field
-                label="Rent USD/month"
-                type="number"
-                value={form.rent_cost_usd?.toString() ?? ""}
-                onChange={(v) => update("rent_cost_usd", numOrNull(v))}
-              />
-              <Field
-                label="World ranking"
-                type="number"
-                value={form.ranking?.toString() ?? ""}
-                onChange={(v) => update("ranking", numOrNull(v))}
-              />
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  type="checkbox"
-                  checked={!!form.has_full_grant}
-                  onChange={(e) => update("has_full_grant", e.target.checked)}
-                  className="h-4 w-4 accent-primary"
-                />
-                Full grant available
-              </label>
-              <TArea label="Description (RU)" value={form.description_ru ?? ""} onChange={(v) => update("description_ru", v)} />
-              <TArea label="Description (EN)" value={form.description_en ?? ""} onChange={(v) => update("description_en", v)} />
-              <TArea label="Requirements (RU)" value={form.requirements_ru ?? ""} onChange={(v) => update("requirements_ru", v)} />
-              <TArea label="Requirements (EN)" value={form.requirements_en ?? ""} onChange={(v) => update("requirements_en", v)} />
-              <TArea label="Values (RU)" value={form.values_ru ?? ""} onChange={(v) => update("values_ru", v)} />
-              <TArea label="Values (EN)" value={form.values_en ?? ""} onChange={(v) => update("values_en", v)} />
-              <TArea label="Housing (RU)" value={form.housing_info_ru ?? ""} onChange={(v) => update("housing_info_ru", v)} />
-              <TArea label="Housing (EN)" value={form.housing_info_en ?? ""} onChange={(v) => update("housing_info_en", v)} />
-              <TArea label="Famous alumni (legacy text)" value={form.famous_alumni ?? ""} onChange={(v) => update("famous_alumni", v)} />
-              <TArea
-                label='Alumni JSON: [{"name_ru":"...","name_en":"...","bio_ru":"...","bio_en":"...","year":"...","photo":"https://..."}]'
-                value={form.alumni ? JSON.stringify(form.alumni, null, 2) : "[]"}
-                onChange={(v) => {
-                  try { update("alumni", JSON.parse(v)); } catch { /* ignore until valid */ }
-                }}
-              />
-            </div>
+            <UniversityFormFields form={form} setForm={setForm} />
             <DialogFooter>
               <Button variant="outline" onClick={() => setOpen(false)}>
                 {t("admin_cancel")}
@@ -273,6 +250,79 @@ function AdminPage() {
           </DialogContent>
         </Dialog>
       </div>
+
+      {/* Submissions inbox */}
+      <div className="mb-10 rounded-2xl border border-border bg-card">
+        <div className="flex items-center gap-2 border-b border-border p-4">
+          <Inbox className="h-5 w-5 text-primary" />
+          <h2 className="font-display text-lg font-bold">{t("admin_submissions")}</h2>
+          {pending.length > 0 && (
+            <span className="ml-2 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-500/20 px-1.5 text-[11px] font-bold text-amber-700 dark:text-amber-400">
+              {pending.length}
+            </span>
+          )}
+        </div>
+        {pending.length === 0 ? (
+          <p className="p-6 text-center text-sm text-muted-foreground">{t("admin_no_pending")}</p>
+        ) : (
+          <table className="w-full text-sm">
+            <thead className="bg-muted/30">
+              <tr>
+                <th className="p-3 text-left">{lang === "ru" ? "Название" : "Name"}</th>
+                <th className="p-3 text-left">{lang === "ru" ? "Страна" : "Country"}</th>
+                <th className="p-3 text-left">{lang === "ru" ? "Дата" : "Date"}</th>
+                <th className="p-3 text-right">{lang === "ru" ? "Действие" : "Action"}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pending.map((s) => (
+                <tr key={s.id} className="border-t border-border">
+                  <td className="p-3 font-medium">{s.name_en}</td>
+                  <td className="p-3 text-muted-foreground">{s.country}</td>
+                  <td className="p-3 text-xs text-muted-foreground">
+                    {new Date(s.created_at).toLocaleDateString()}
+                  </td>
+                  <td className="p-3 text-right">
+                    <Button size="sm" onClick={() => openReview(s)}>
+                      {t("admin_review")}
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      {/* Review dialog */}
+      <Dialog open={reviewOpen} onOpenChange={setReviewOpen}>
+        <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{t("admin_review")}: {reviewing?.name_en}</DialogTitle>
+          </DialogHeader>
+          <UniversityFormFields form={reviewForm} setForm={setReviewForm} />
+          <div className="mt-3">
+            <Label>{t("admin_notes")}</Label>
+            <Textarea
+              rows={2}
+              value={adminNotes}
+              onChange={(e) => setAdminNotes(e.target.value)}
+              placeholder={lang === "ru" ? "Что улучшить или почему отклонено..." : "What to improve or why rejected..."}
+            />
+          </div>
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={() => setReviewOpen(false)}>
+              {t("admin_cancel")}
+            </Button>
+            <Button variant="destructive" onClick={reject}>
+              <X className="h-4 w-4" /> {t("admin_reject")}
+            </Button>
+            <Button onClick={approve}>
+              <Check className="h-4 w-4" /> {t("admin_approve")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <div className="overflow-hidden rounded-2xl border border-border bg-card">
         <table className="w-full text-sm">
@@ -307,73 +357,6 @@ function AdminPage() {
           </tbody>
         </table>
       </div>
-    </div>
-  );
-}
-
-function Field({
-  label,
-  value,
-  onChange,
-  type = "text",
-  step,
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  type?: string;
-  step?: string;
-}) {
-  return (
-    <div>
-      <Label>{label}</Label>
-      <Input type={type} step={step} value={value} onChange={(e) => onChange(e.target.value)} />
-    </div>
-  );
-}
-
-function TArea({
-  label,
-  value,
-  onChange,
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-}) {
-  return (
-    <div className="sm:col-span-2">
-      <Label>{label}</Label>
-      <Textarea rows={2} value={value} onChange={(e) => onChange(e.target.value)} />
-    </div>
-  );
-}
-
-function SelectField({
-  label,
-  value,
-  onChange,
-  options,
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  options: { v: string; l: string }[];
-}) {
-  return (
-    <div>
-      <Label>{label}</Label>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-xs"
-      >
-        {options.map((o) => (
-          <option key={o.v} value={o.v}>
-            {o.l}
-          </option>
-        ))}
-      </select>
     </div>
   );
 }
