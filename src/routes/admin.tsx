@@ -100,7 +100,12 @@ function AdminPage() {
   };
   const openEdit = (u: University) => {
     setEditing(u);
-    setForm({ ...emptyUniForm, ...u, region: u.region as "usa" | "europe" | "asia" });
+    setForm({
+      ...emptyUniForm,
+      ...u,
+      region: u.region as "usa" | "europe" | "asia",
+      alumni: Array.isArray(u.alumni) ? (u.alumni as never as UniFormState["alumni"]) : [],
+    });
     setOpen(true);
   };
 
