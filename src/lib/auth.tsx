@@ -7,6 +7,7 @@ interface AuthCtx {
   session: Session | null;
   isAdmin: boolean;
   isEditor: boolean;
+  isOwner: boolean;
   loading: boolean;
   signOut: () => Promise<void>;
 }
@@ -18,6 +19,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isEditor, setIsEditor] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const loadRoles = (userId: string) => {
@@ -27,8 +29,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .eq("user_id", userId)
       .then(({ data }) => {
         const roles = (data ?? []).map((r) => r.role as string);
-        setIsAdmin(roles.includes("admin"));
-        setIsEditor(roles.includes("editor") || roles.includes("admin"));
+        const owner = roles.includes("owner");
+        setIsOwner(owner);
+        setIsAdmin(owner || roles.includes("admin"));
+        setIsEditor(owner || roles.includes("admin") || roles.includes("editor"));
       });
   };
 
@@ -41,6 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         setIsAdmin(false);
         setIsEditor(false);
+        setIsOwner(false);
       }
     });
 
@@ -59,7 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <Ctx.Provider value={{ user, session, isAdmin, isEditor, loading, signOut }}>
+    <Ctx.Provider value={{ user, session, isAdmin, isEditor, isOwner, loading, signOut }}>
       {children}
     </Ctx.Provider>
   );
