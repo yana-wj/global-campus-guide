@@ -1,8 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
 import { useCompare } from "@/lib/compare-store";
+import { useAuth } from "@/lib/auth";
+import { useFavorites } from "@/hooks/use-favorites";
 import { Button } from "@/components/ui/button";
-import { Award, MapPin, GitCompare, Check } from "lucide-react";
+import { Award, MapPin, GitCompare, Check, Heart } from "lucide-react";
+import { toast } from "sonner";
 import type { Database } from "@/integrations/supabase/types";
 
 export type University = Database["public"]["Tables"]["universities"]["Row"];
@@ -10,9 +13,23 @@ export type University = Database["public"]["Tables"]["universities"]["Row"];
 export function UniversityCard({ uni }: { uni: University }) {
   const { lang, t } = useLang();
   const { has, toggle } = useCompare();
+  const { user } = useAuth();
+  const { has: isFav, toggle: toggleFav } = useFavorites();
   const inCompare = has(uni.id);
+  const fav = isFav(uni.id);
   const name = lang === "ru" ? uni.name_ru : uni.name_en;
   const desc = lang === "ru" ? uni.description_ru : uni.description_en;
+
+  const onFav = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!user) {
+      toast.error(t("fav_login_required"));
+      return;
+    }
+    const added = await toggleFav(uni.id);
+    toast.success(added ? t("fav_add") : t("fav_remove"));
+  };
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
@@ -37,6 +54,13 @@ export function UniversityCard({ uni }: { uni: University }) {
               #{uni.ranking}
             </div>
           )}
+          <button
+            onClick={onFav}
+            aria-label={fav ? t("fav_remove") : t("fav_add")}
+            className="absolute bottom-3 right-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-background/90 shadow-sm backdrop-blur transition-transform hover:scale-110"
+          >
+            <Heart className={`h-4 w-4 ${fav ? "fill-destructive text-destructive" : "text-foreground/70"}`} />
+          </button>
         </div>
       </Link>
 

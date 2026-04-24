@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SubmitRouteImport } from './routes/submit'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as CompareRouteImport } from './routes/compare'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -20,6 +21,11 @@ import { Route as UniversitiesSlugRouteImport } from './routes/universities.$slu
 const SubmitRoute = SubmitRouteImport.update({
   id: '/submit',
   path: '/submit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CompareRoute = CompareRouteImport.update({
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/compare': typeof CompareRoute
+  '/profile': typeof ProfileRoute
   '/submit': typeof SubmitRoute
   '/universities/$slug': typeof UniversitiesSlugRoute
   '/universities/': typeof UniversitiesIndexRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/compare': typeof CompareRoute
+  '/profile': typeof ProfileRoute
   '/submit': typeof SubmitRoute
   '/universities/$slug': typeof UniversitiesSlugRoute
   '/universities': typeof UniversitiesIndexRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/compare': typeof CompareRoute
+  '/profile': typeof ProfileRoute
   '/submit': typeof SubmitRoute
   '/universities/$slug': typeof UniversitiesSlugRoute
   '/universities/': typeof UniversitiesIndexRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/compare'
+    | '/profile'
     | '/submit'
     | '/universities/$slug'
     | '/universities/'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/compare'
+    | '/profile'
     | '/submit'
     | '/universities/$slug'
     | '/universities'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/compare'
+    | '/profile'
     | '/submit'
     | '/universities/$slug'
     | '/universities/'
@@ -116,6 +128,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
   CompareRoute: typeof CompareRoute
+  ProfileRoute: typeof ProfileRoute
   SubmitRoute: typeof SubmitRoute
   UniversitiesSlugRoute: typeof UniversitiesSlugRoute
   UniversitiesIndexRoute: typeof UniversitiesIndexRoute
@@ -128,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/submit'
       fullPath: '/submit'
       preLoaderRoute: typeof SubmitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/compare': {
@@ -180,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
   CompareRoute: CompareRoute,
+  ProfileRoute: ProfileRoute,
   SubmitRoute: SubmitRoute,
   UniversitiesSlugRoute: UniversitiesSlugRoute,
   UniversitiesIndexRoute: UniversitiesIndexRoute,

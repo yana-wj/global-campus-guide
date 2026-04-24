@@ -22,6 +22,7 @@ import {
   emptyUniForm,
   type UniFormState,
 } from "@/components/UniversityFormFields";
+import { StaffManagement } from "@/components/StaffManagement";
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
@@ -36,7 +37,7 @@ type Submission = UniFormState & {
 };
 
 function AdminPage() {
-  const { user, isAdmin, loading } = useAuth();
+  const { user, isAdmin, isOwner, loading } = useAuth();
   const { t, lang } = useLang();
   const [items, setItems] = useState<University[]>([]);
   const [open, setOpen] = useState(false);
@@ -255,6 +256,8 @@ function AdminPage() {
           </DialogContent>
         </Dialog>
       </div>
+
+      {isOwner && <StaffManagement />}
 
       {/* Submissions inbox */}
       <div className="mb-10 rounded-2xl border border-border bg-card">

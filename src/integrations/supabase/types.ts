@@ -14,6 +14,35 @@ export type Database = {
   }
   public: {
     Tables: {
+      favorites: {
+        Row: {
+          created_at: string
+          id: string
+          university_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          university_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          university_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorites_university_id_fkey"
+            columns: ["university_id"]
+            isOneToOne: false
+            referencedRelation: "universities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -278,11 +307,44 @@ export type Database = {
         }
         Relationships: []
       }
+      view_history: {
+        Row: {
+          id: string
+          university_id: string
+          user_id: string
+          viewed_at: string
+        }
+        Insert: {
+          id?: string
+          university_id: string
+          user_id: string
+          viewed_at?: string
+        }
+        Update: {
+          id?: string
+          university_id?: string
+          user_id?: string
+          viewed_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "view_history_university_id_fkey"
+            columns: ["university_id"]
+            isOneToOne: false
+            referencedRelation: "universities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      grant_role_by_email: {
+        Args: { _email: string; _role: Database["public"]["Enums"]["app_role"] }
+        Returns: string
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -290,9 +352,22 @@ export type Database = {
         }
         Returns: boolean
       }
+      list_staff_roles: {
+        Args: never
+        Returns: {
+          created_at: string
+          email: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }[]
+      }
+      revoke_role_by_email: {
+        Args: { _email: string; _role: Database["public"]["Enums"]["app_role"] }
+        Returns: undefined
+      }
     }
     Enums: {
-      app_role: "admin" | "user" | "editor"
+      app_role: "admin" | "user" | "editor" | "owner"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -420,7 +495,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "user", "editor"],
+      app_role: ["admin", "user", "editor", "owner"],
     },
   },
 } as const

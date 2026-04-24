@@ -3,7 +3,7 @@ import { useLang } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
 import { useCompare } from "@/lib/compare-store";
 import { Button } from "@/components/ui/button";
-import { Compass, GitCompare, LogOut, ShieldCheck, LogIn } from "lucide-react";
+import { Compass, GitCompare, LogOut, ShieldCheck, LogIn, User as UserIcon } from "lucide-react";
 import { CompareFAB } from "@/components/CompareFAB";
 
 export function Layout() {
@@ -82,10 +82,18 @@ export function Layout() {
               </button>
             </div>
             {user ? (
-              <Button variant="ghost" size="sm" onClick={() => signOut()}>
-                <LogOut className="h-4 w-4" />
-                <span className="hidden sm:inline">{t("nav_signout")}</span>
-              </Button>
+              <>
+                <Button asChild variant="ghost" size="sm">
+                  <Link to="/profile">
+                    <UserIcon className="h-4 w-4" />
+                    <span className="hidden sm:inline">{t("nav_profile")}</span>
+                  </Link>
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => signOut()}>
+                  <LogOut className="h-4 w-4" />
+                  <span className="hidden sm:inline">{t("nav_signout")}</span>
+                </Button>
+              </>
             ) : (
               <Button asChild variant="ghost" size="sm">
                 <Link to="/auth">

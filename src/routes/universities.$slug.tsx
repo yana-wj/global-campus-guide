@@ -2,9 +2,12 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useLang } from "@/lib/i18n";
 import { useCompare } from "@/lib/compare-store";
+import { useAuth } from "@/lib/auth";
+import { useFavorites } from "@/hooks/use-favorites";
 import { supabase } from "@/integrations/supabase/client";
 import type { University } from "@/components/UniversityCard";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import {
   Award,
   ExternalLink,
@@ -64,6 +67,8 @@ function DetailPage() {
   const { slug } = Route.useParams();
   const { t, lang } = useLang();
   const { has, toggle } = useCompare();
+  const { user } = useAuth();
+  const { has: isFav, toggle: toggleFav } = useFavorites();
   const [uni, setUni] = useState<University | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -77,8 +82,15 @@ function DetailPage() {
       .then(({ data }) => {
         setUni(data);
         setLoading(false);
+        // Record view history (fire and forget; RLS ensures only own user)
+        if (data && user) {
+          supabase
+            .from("view_history")
+            .insert({ user_id: user.id, university_id: data.id })
+            .then(() => {});
+        }
       });
-  }, [slug]);
+  }, [slug, user]);
 
   if (loading) {
     return <div className="py-20 text-center text-muted-foreground">{t("loading")}</div>;
@@ -91,6 +103,16 @@ function DetailPage() {
   const values = lang === "ru" ? uni.values_ru : uni.values_en;
   const housing = lang === "ru" ? uni.housing_info_ru : uni.housing_info_en;
   const inCompare = has(uni.id);
+  const fav = isFav(uni.id);
+
+  const onFav = async () => {
+    if (!user) {
+      toast.error(t("fav_login_required"));
+      return;
+    }
+    const added = await toggleFav(uni.id);
+    toast.success(added ? t("fav_add") : t("fav_remove"));
+  };
 
   return (
     <article>
@@ -137,6 +159,10 @@ function DetailPage() {
                   </a>
                 </Button>
               )}
+              <Button variant={fav ? "default" : "outline"} onClick={onFav}>
+                <Heart className={`h-4 w-4 ${fav ? "fill-current" : ""}`} />
+                {fav ? t("fav_remove") : t("fav_add")}
+              </Button>
               <Button
                 variant={inCompare ? "default" : "secondary"}
                 onClick={() => toggle(uni.id)}
