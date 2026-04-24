@@ -8,7 +8,7 @@ import { CompareFAB } from "@/components/CompareFAB";
 
 export function Layout() {
   const { lang, setLang, t } = useLang();
-  const { user, isAdmin, signOut } = useAuth();
+  const { user, isAdmin, isEditor, signOut } = useAuth();
   const { ids } = useCompare();
   const loc = useLocation();
 
@@ -51,6 +51,11 @@ export function Layout() {
                 )}
               </span>
             </Link>
+            {isEditor && !isAdmin && (
+              <Link to="/submit" className={linkCls(loc.pathname.startsWith("/submit"))}>
+                {t("nav_submit")}
+              </Link>
+            )}
             {isAdmin && (
               <Link to="/admin" className={linkCls(loc.pathname.startsWith("/admin"))}>
                 <span className="inline-flex items-center gap-1">
