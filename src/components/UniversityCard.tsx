@@ -6,6 +6,7 @@ import { useFavorites } from "@/hooks/use-favorites";
 import { Button } from "@/components/ui/button";
 import { Award, MapPin, GitCompare, Check, Heart } from "lucide-react";
 import { toast } from "sonner";
+import { toeflTo6 } from "@/lib/toefl";
 import type { Database } from "@/integrations/supabase/types";
 
 export type University = Database["public"]["Tables"]["universities"]["Row"];
@@ -95,9 +96,9 @@ export function UniversityCard({ uni }: { uni: University }) {
           </div>
           <div>
             <div className="font-bold text-foreground">
-              {uni.toefl_min ?? "—"}
+              {uni.toefl_min != null ? toeflTo6(uni.toefl_min)?.toFixed(1) : "—"}
             </div>
-            <div className="text-muted-foreground">TOEFL</div>
+            <div className="text-muted-foreground">TOEFL /6</div>
           </div>
         </div>
 

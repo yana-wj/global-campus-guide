@@ -13,8 +13,23 @@ export const dict: Dict = {
   nav_admin: { ru: "Админ", en: "Admin" },
   nav_submit: { ru: "Предложить вуз", en: "Submit university" },
   nav_profile: { ru: "Профиль", en: "Profile" },
+  nav_ai: { ru: "AI-подбор", en: "AI matcher" },
   nav_signin: { ru: "Войти", en: "Sign in" },
   nav_signout: { ru: "Выйти", en: "Sign out" },
+
+  ai_disclaimer: {
+    ru: "Это ответ искусственного интеллекта. Он может ошибаться. Для важных решений обязательно посоветуйтесь с живым ментором или приёмной комиссией вуза.",
+    en: "This is AI-generated content. It may be inaccurate. For important decisions, always consult a real mentor or the university's admissions office.",
+  },
+  ai_intro_search: {
+    ru: "Расскажите о себе: интересы, баллы (TOEFL/IELTS, SAT, GPA), бюджет, регион, нужны ли гранты — и AI подберёт вузы из нашего каталога.",
+    en: "Tell us about yourself: interests, scores (TOEFL/IELTS, SAT, GPA), budget, region, grants — AI will suggest matches from our catalog.",
+  },
+  toefl_new_scale: { ru: "TOEFL (нов. шкала 0–6)", en: "TOEFL (new 0–6 scale)" },
+  toefl_legacy_note: {
+    ru: "Показано по новой 6-балльной шкале ETS (введена в 2026)",
+    en: "Shown on the new ETS 6-point scale (introduced in 2026)",
+  },
 
   profile_title: { ru: "Мой профиль", en: "My profile" },
   profile_favorites: { ru: "Избранные университеты", en: "Favorite universities" },
