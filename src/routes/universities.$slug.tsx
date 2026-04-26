@@ -8,6 +8,9 @@ import { supabase } from "@/integrations/supabase/client";
 import type { University } from "@/components/UniversityCard";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { toeflTo6 } from "@/lib/toefl";
+import { fixWikimediaUrl } from "@/lib/wikimedia";
+import { AiChat } from "@/components/AiChat";
 import {
   Award,
   ExternalLink,
@@ -189,8 +192,8 @@ function DetailPage() {
             accent="sky"
           />
           <StatCard
-            label="TOEFL / IELTS"
-            value={`${uni.toefl_min ?? "—"} / ${uni.ielts_min ?? "—"}`}
+            label={`${t("toefl_new_scale")} / IELTS`}
+            value={`${uni.toefl_min != null ? toeflTo6(uni.toefl_min)?.toFixed(1) : "—"} / ${uni.ielts_min ?? "—"}`}
             accent="sun"
           />
           <StatCard
@@ -266,9 +269,13 @@ function DetailPage() {
                         <div key={i} className="flex gap-3 rounded-xl border border-border/60 bg-muted/20 p-3">
                           {a.photo && (
                             <img
-                              src={a.photo}
+                              src={fixWikimediaUrl(a.photo)}
                               alt={aname}
                               loading="lazy"
+                              referrerPolicy="no-referrer"
+                              onError={(e) => {
+                                (e.currentTarget as HTMLImageElement).style.display = "none";
+                              }}
                               className="h-16 w-16 flex-shrink-0 rounded-full object-cover ring-2 ring-sun/40"
                             />
                           )}
