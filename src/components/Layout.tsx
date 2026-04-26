@@ -40,6 +40,11 @@ export function Layout() {
             <Link to="/universities" className={linkCls(loc.pathname.startsWith("/universities"))}>
               {t("nav_catalog")}
             </Link>
+            <Link to="/ai-search" className={linkCls(loc.pathname === "/ai-search")}>
+              <span className="inline-flex items-center gap-1">
+                ✨ {t("nav_ai")}
+              </span>
+            </Link>
             <Link to="/compare" className={linkCls(loc.pathname === "/compare")}>
               <span className="inline-flex items-center gap-1">
                 <GitCompare className="h-4 w-4" />
