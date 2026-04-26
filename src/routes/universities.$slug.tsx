@@ -202,6 +202,7 @@ function DetailPage() {
             accent="primary"
           />
         </div>
+        <p className="mb-6 text-xs text-muted-foreground">{t("toefl_legacy_note")}</p>
 
         <div className="grid gap-6 lg:grid-cols-2">
           {desc && (
@@ -296,6 +297,29 @@ function DetailPage() {
               </Section>
             );
           })()}
+        </div>
+
+        {/* AI mentor */}
+        <div className="mt-8">
+          <AiChat
+            mode="mentor"
+            university={{
+              name,
+              country: uni.country,
+              city: uni.city,
+              ranking: uni.ranking,
+              admission_rate: uni.admission_rate,
+              tuition_usd: uni.tuition_usd,
+              toefl_min: uni.toefl_min,
+              ielts_min: uni.ielts_min,
+              sat_min: uni.sat_min,
+              gpa_min: uni.gpa_min,
+              has_full_grant: uni.has_full_grant,
+              requirements: reqs,
+              values,
+              description: desc,
+            }}
+          />
         </div>
       </div>
     </article>
